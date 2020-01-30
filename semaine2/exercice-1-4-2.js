@@ -49,31 +49,37 @@
         
         } while (quotient != 0)
 
-        if (resultat.length >= 4){ // 2bytes
+        if (number <= 252){
 
-            if (resultat.length == 4){
+            return resultat;
 
-                resultat = "fd" + resultat;
 
-            }else if (resultat.length <= 8){
-                        
-                while (resultat.length < 8){
+        }else if (number <= 65535){
 
-                    resultat = resultat + "00";
-                }
-                resultat = "fe" + resultat;
+            while (resultat.length < 4){
 
-            }else if (resultat.length <=16){
+                resultat = resultat + "00";
+            } 
 
-                while (resultat.length < 16){
+            resultat = "fd" + resultat;                
 
-                    resultat = resultat + "00";
-                }
+        }else if (number <= 4294967295){
 
-                resultat = "ff" + resultat;
+            while (resultat.length < 8){
 
+                resultat = resultat + "00";
             }
+            resultat = "fe" + resultat;
+
+        }else if ( number <= 18446744073709552000){
+
+            while (resultat.length < 16){
+
+                resultat = resultat + "00";
+            }
+
         }
+         
         return resultat
         
         }
@@ -97,31 +103,39 @@
             }
 
             resultat = littleHexa; //on va chercher le varLittle Hexa
-            if (resultat.length >= 4){ // 2bytes
 
-                if (resultat.length == 4){
+            if (number <= 252){
+
+                return resultat;
+
+
+            }else if (number <= 65535){
+
+                while (resultat.length < 4){
     
-                    resultat = "fd" + resultat;
+                    resultat = resultat + "00";
+                } 
+
+                resultat = "fd" + resultat;                
+
+            }else if (number <= 4294967295){
+
+                while (resultat.length < 8){
     
-                }else if (resultat.length <= 8){
-                            
-                    while (resultat.length < 8){
-    
-                        resultat = resultat + "00";
-                    }
-                    resultat = "fe" + resultat;
-    
-                }else if (resultat.length <=16){
-    
-                    while (resultat.length < 16){
-    
-                        resultat = resultat + "00";
-                    }
-    
-                    resultat = "ff" + resultat;
-    
+                    resultat = resultat + "00";
                 }
+                resultat = "fe" + resultat;
+
+            }else if ( number <= 18446744073709552000){
+
+                while (resultat.length < 16){
+    
+                    resultat = resultat + "00";
+                }
+
             }
+             
+            
 
 
             return resultat;
@@ -131,3 +145,6 @@
 
 console.log(ConvertDecimalToHexadecimalVariableLittleEndian(466321))
 console.log(Version2ConvertDecimalToHexadecimalVariableLittleEndian(466321))
+
+console.log(ConvertDecimalToHexadecimalVariableLittleEndian(255))
+console.log(Version2ConvertDecimalToHexadecimalVariableLittleEndian(255))
