@@ -80,9 +80,6 @@ function ConvertDecimalToHexadecimalLittleEndian(number){
     
     } while (quotient != 0)
     
-    if (resultat.length % 2 == 1){
-        resultat = '0' + resultat;
-    }
     return resultat
     
     }
