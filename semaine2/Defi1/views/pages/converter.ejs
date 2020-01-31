@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title> Defi1 </title>
+        <link rel="stylesheet" href="/assests/semantic/semantic.min.css">
+        <style>
+            .main.container{
+                margin-top: 7em;
+                overflow-x:auto;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="ui fixed inverted menu">
+            <a href="/" class="header item"> Convertisseur / analyseur Blockchain Bitcoin</a>
+        </div>
+        <div class="ui main container">
+            <fieldset>
+                <legend>Convertisseur</legend>               
+                <form onchange="" >
+                    <div class ="field" >
+                    <p>
+                        <label for = "number"> Nombre à convertir </label>
+                        <input type="text" id="number" name="number"> 
+                        <select id="select">
+                            <option value="nan" selected></option>
+                            <option value="Decimal">Décimal</option> 
+                            <option value="Hexadecimal">Hexadécimal</option>
+                          </select>
+                        <input type = "button" id="Convert" name="Convert" value="Convertir" onclick="convertTo()" class="ui blue icon button ">
+                    </p>           
+                    
+                    <input type="text" id="decimal" name="decimal">  
+                    <label for = "decimal"> Décimal </label>                
+                    <br>                
+                    
+                    <input type="text" id="hexadecimal" name="hexadecimal"> 
+                    <label for = "hexadecimal"> Hexadécimal </label>                   
+                    <br>
+                    
+                    <input type="text" id="binaire" name="binaire">
+                    <label for = "binaire"> Binaire </label>
+                    <br>
+                    
+                    <input type="text" id="HLE" name="HLE">
+                    <label for = "HLE"> Hexadécimal little endian </label>
+                    <br>
+                    
+                    <input type="text" id="varInt" name="varInt">
+                    <label for = "varInt"> VarInt </label>
+                
+                </form>
+            </fieldset>
+        </section>
+        <fieldset>
+            <legend>Analyse du block</legend>
+            
+            <form id="jsonFile" name="jsonFile" enctype="multipart/form-data" method="post">
+
+                <fieldset>
+                    <label for = "file"> choisir un fichier </label>
+                    <input type='file' id='fileinput'>
+                    <input type='button' id='btnLoad' value='Afficher' onclick='loadFile();' class="ui blue icon button ">
+                </fieldset>
+              </form>
+              <pre id ="json"></pre>
+          
+
+            
+        </fieldset>
+    </div>
+        <script type="text/javascript" src="javascript/converter.js"></script>
+       
+    </body>
+</html>

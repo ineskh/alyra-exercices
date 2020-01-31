@@ -93,7 +93,7 @@
             
             let hexa = number.toString(16)
             if (hexa.length % 2 == 1){
-                hexa = "O" + hexa;
+                hexa = "0" + hexa;
             }
             let littleHexa = '';
             let i = hexa.length 
