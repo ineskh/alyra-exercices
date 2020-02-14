@@ -76,7 +76,7 @@ contract ArtipCrowdSale is Context, ERC20, ArtipToken {
     event TokensAchete(address indexed purchaser, address indexed beneficiary, uint256 value, uint256 amount);
     
     constructor (address payable wallet) public {
-        require(wallet != address(0), "Crowdsale: wallet is the zero address");
+        require(wallet != address(0), "ArtipCrowdSale: wallet is the zero address");
         _wallet = wallet;
         artiptoken = new ArtipToken();
         admin = msg.sender;

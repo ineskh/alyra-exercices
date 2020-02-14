@@ -29,10 +29,12 @@ contract('ArtipCrowdSale', function (accounts) {
   const _maxContrubSale = ether("500");
   const _maxArtip = ether("6000000") ;
   const _preSalReduction = "20"; //20%
-  const wallet = "0x13706550eA6dDA91EcE780EBe03Dd2dEc12BDA18";
-
   const owner = accounts[0];
   const recipient = accounts[1];
+  
+  const wallet = "0x13706550eA6dDA91EcE780EBe03Dd2dEc12BDA18";
+
+  
   
   context('with token', async function () {
   it('requires a non-null wallet', async function () {
@@ -43,7 +45,7 @@ contract('ArtipCrowdSale', function (accounts) {
 });
 
   beforeEach(async function () {
-    this.ArtipCrowdSaleInstance = await ArtipCrowdSale.new(wallet);//, {from: accounts[0]});
+    this.ArtipCrowdSaleInstance = await ArtipCrowdSale.new(wallet);
   }); 
 
 });
