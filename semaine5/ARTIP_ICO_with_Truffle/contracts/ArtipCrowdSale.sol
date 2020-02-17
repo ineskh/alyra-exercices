@@ -3,20 +3,21 @@ pragma solidity ^0.5.12;
 //import "github.com/OpenZeppelin/openzeppelin-contract/contracts/GSN/Context.sol";
 //import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
 //import "github.com/OpenZeppelin/openzeppelin-contracts/contracts/token/ERC20/ERC20Detailed.sol";
+import "@openzeppelin/contracts/math/SafeMath.sol";
 
 
 import "@openzeppelin/contracts/GSN/Context.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol"; 
 import "@openzeppelin/contracts/token/ERC20/ERC20Detailed.sol";
  
-contract ArtipToken is Context, ERC20, ERC20Detailed {
-    
-     /**
-     * @dev Constructor that gives _msgSender() all of existing tokens.
-     *
-     */
+contract ArtipToken is Context, ERC20, ERC20Detailed  {
+        
+    //string public name = "ArtipToken";
+    //string public symbol = "ARTIP";
+    //uint256 public decimals = 18;
+
     constructor () public ERC20Detailed("ArtipToken", "ARTIP", 18) {
-        _mint(_msgSender(), 5 * (10 ** uint256(decimals())));
+        _mint(_msgSender(), 0 * (10 ** uint256(decimals())));
     }
 
 }
@@ -80,9 +81,7 @@ contract ArtipCrowdSale is Context, ERC20, ArtipToken {
         _wallet = wallet;
         artiptoken = new ArtipToken();
         admin = msg.sender;
-}
-
-   
+} 
     
     function acheterArtipToken() public  payable {
         uint256 weiAmount = msg.value;
@@ -115,8 +114,8 @@ contract ArtipCrowdSale is Context, ERC20, ArtipToken {
     
     function _premiereValidation(address beneficiary, uint256 weiAmount) internal view {
         require(artiptoken.totalSupply() < maxArtip, "le maximum de artip est atteint");
-        require(beneficiary != address(0), "Crowdsale: beneficiary is the zero address");
-        require(weiAmount != 0, "Crowdsale: weiAmount is 0");
+        require(beneficiary != address(0), "ArtipCrowdsale: beneficiary is the zero address");
+        require(weiAmount != 0, "ArtipCrowdsale: weiAmount is 0");
         require(now >= datePreSaleStart && now <= dateSaleEnd, " sale expiré !");
         this; // silence state mutability warning without generating bytecode - see https://github.com/ethereum/solidity/issues/2691
     }
