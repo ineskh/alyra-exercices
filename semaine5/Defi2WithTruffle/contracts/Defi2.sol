@@ -1,4 +1,4 @@
-pragma solidity ^0.5.16;
+pragma solidity 0.5.16;
 
 pragma experimental ABIEncoderV2;
 
@@ -7,12 +7,13 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 contract Defi2 {
     
     using SafeMath for uint;
-    mapping (address => Utilisateur) public utilisateur; 
-    mapping (address => bool) public bannies;
+    
     address public admin;
     enum etatDemande {OUVERTE, ENCOURS, FERMER}
     Demande [] public demandes;
-    
+    mapping (address => Utilisateur) public utilisateur; 
+    mapping (address => bool) public bannies;
+
     struct Utilisateur {
         string nom;
         string prenom;
@@ -23,15 +24,15 @@ contract Defi2 {
     struct Demande {
         uint renumeration;
         uint delais;
-        string decrireTache;
-        etatDemande etat; 
         uint minReputation;
+        string decrireTache;
+        etatDemande etat;       
         address [] candidatsAddress;
-        mapping(address => Utilisateur) candidats;
         address entrepriseAddress;
         address candidatAccepte;
         bytes32 linkDepot;
         bool autorisePayment;
+        mapping(address => Utilisateur) candidats;
         
     }
    
@@ -79,7 +80,7 @@ contract Defi2 {
       require(_renumeration > 0 , "il faut une renumeration > 0");
       require(utilisateur[msg.sender].adr == msg.sender, "utilisateur n'est pas inscrit");
       require(_delais > 0, "il faut un delais > 0");
-      require(msg.value >= _renumeration.mul(2).div(100)+_renumeration, "msg.value : n'est pas suffisant");
+      require(msg.value >= _renumeration.add(_renumeration.mul(2).div(100)), "msg.value : n'est pas suffisant");
       require(bytes(_decrireTache).length > 0, "Il faut une description des taches");
       require(_etat == etatDemande.OUVERTE || _etat == etatDemande.FERMER , "l'etat de la Demande est indefini");
       require(_minReputation > 0, "la reputation minimale doit etre > 0");
@@ -91,25 +92,27 @@ contract Defi2 {
       dem.minReputation = _minReputation;
       dem.entrepriseAddress = msg.sender;
       demandes.push(dem);
-      uint val = _renumeration.mul(2).div(100);
+      uint val = _renumeration.add(_renumeration.mul(2).div(100));
       emit eventAjouterDemande(msg.sender, val);
 
     }
     
-    function changerEtatDemande(uint _indiceDemande, etatDemande _etat) public estInscrit(msg.sender) {
+    /*function changerEtatDemande(uint _indiceDemande, etatDemande _etat) public estInscrit(msg.sender) {
         require(demandes[_indiceDemande].entrepriseAddress == msg.sender);
         demandes[_indiceDemande].etat = _etat;
-    }
+    }*/
     
-    function postuler(uint _indiceDemande) public estInscrit(msg.sender) {
+    function postuler(uint _indiceDemande) public {
+      require (utilisateur[msg.sender].adr == msg.sender, "n'est pas inscrit");
       require(_indiceDemande < demandes.length, "la demandes n'existe pas");
       require(demandes[_indiceDemande].etat == etatDemande.OUVERTE, "la demande n'est pas ouverte");
       demandes[_indiceDemande].candidatsAddress.push(msg.sender);
       demandes[_indiceDemande].candidats[msg.sender] = utilisateur[msg.sender];
-      demandes[_indiceDemande].etat = etatDemande.ENCOURS;
     }
     
-    function accepterOffre(uint _indiceDemande,address _candidatAccepte) public estInscrit(msg.sender) estInscrit(_candidatAccepte){
+    function accepterOffre(uint _indiceDemande,address _candidatAccepte) public {
+        require (utilisateur[msg.sender].adr == msg.sender, "n'est pas inscrit");
+         require (utilisateur[_candidatAccepte].adr == _candidatAccepte, "n'est pas inscrit");
         require(_indiceDemande < demandes.length, "la demandes n'existe pas");
         require(demandes[_indiceDemande].entrepriseAddress == msg.sender, "vous n'etes pas le titulaire de la demande");
         require(demandes[_indiceDemande].etat == etatDemande.OUVERTE, "la demande n'est pas ouverte");
@@ -123,7 +126,8 @@ contract Defi2 {
         return keccak256(_link);
     }
     
-    function livraison(uint _indiceDemande, bytes32 _linkDepot) public estInscrit(msg.sender) {
+    function livraison(uint _indiceDemande, bytes32 _linkDepot) public {
+        require (utilisateur[msg.sender].adr == msg.sender, "n'est pas inscrit");
         require(_indiceDemande < demandes.length, "la demandes n'existe pas");
         require(demandes[_indiceDemande].candidatAccepte == msg.sender, "vous n'etes pas le candidat accepté pour cette demande");
         require(demandes[_indiceDemande].etat == etatDemande.ENCOURS, "la demande n'est pas en cours");
@@ -134,7 +138,8 @@ contract Defi2 {
         
     }
     
-    function renumeration(uint _indiceDemande) public estInscrit(msg.sender) payable {
+    function renumeration(uint _indiceDemande) public  payable {
+        require (utilisateur[msg.sender].adr == msg.sender, "n'est pas inscrit");
         require(_indiceDemande < demandes.length, "la demandes n'existe pas");
         require(demandes[_indiceDemande].candidatAccepte == msg.sender, "vous n'etes pas le candidat accepté pour cette demande");
         require(demandes[_indiceDemande].autorisePayment == true, "Payment pas encore autorisé");
