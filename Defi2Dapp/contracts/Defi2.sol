@@ -12,7 +12,7 @@ contract Defi2 {
     using SafeMath for uint;
     address private admin;
     enum etatDemande {OUVERTE, ENCOURS, FERMER}
-    Demande[] public demandes;
+    Demande[] private demandes;
     mapping (address => Utilisateur) public utilisateur;
     mapping (address => bool) public bannies;
 
@@ -33,10 +33,10 @@ contract Defi2 {
         address candidatAccepte;
         bytes32 linkDepot;
         bool autorisePayment;
-        mapping(address => Utilisateur) candidats;
+        //mapping(address => Utilisateur) candidats;
     }
-    modifier estInscrit(address _address){
-        require(utilisateur[_address].adr != msg.sender, "Utilisateur déja inscrit");
+    modifier nestInscrit(){
+        require(utilisateur[msg.sender].adr != msg.sender, "Utilisateur déja inscrit");
         _;
     }
     modifier estAdmin(){
@@ -68,7 +68,7 @@ contract Defi2 {
     /// @param _nom le nom de l'utilisateur
     /// @param _prenom le prenom de l'utilisateur
 
-    function inscription(string memory _nom, string memory _prenom) public estInscrit(msg.sender)
+    function inscription(string memory _nom, string memory _prenom) public nestInscrit()
     nEstPasBannie(msg.sender){
         Utilisateur memory user = Utilisateur(_nom, _prenom, msg.sender, 1);
         utilisateur[msg.sender] = user;
@@ -115,7 +115,7 @@ contract Defi2 {
     /// @param _indiceDemande indice de la demande
     /// @param _etat etat de la demande (Ouverte,encours,fermé)
 
-    function changerEtatDemande(uint _indiceDemande, etatDemande _etat) public estInscrit(msg.sender) {
+    function changerEtatDemande(uint _indiceDemande, etatDemande _etat) public nestInscrit() {
         require(demandes[_indiceDemande].entrepriseAddress == msg.sender, "vous n'etes pas le createur de la demande");
         demandes[_indiceDemande].etat = _etat;
     }
@@ -128,7 +128,7 @@ contract Defi2 {
       require(_indiceDemande < demandes.length, "la demandes n'existe pas");
       require(demandes[_indiceDemande].etat == etatDemande.OUVERTE, "la demande n'est pas ouverte");
       demandes[_indiceDemande].candidatsAddress.push(msg.sender);
-      demandes[_indiceDemande].candidats[msg.sender] = utilisateur[msg.sender];
+     // demandes[_indiceDemande].candidats[msg.sender] = utilisateur[msg.sender];
     }
 
     /// @notice Cette fonction permet a un utilisateur (representant de l'entreprise) d'accepter une candidature
@@ -141,8 +141,8 @@ contract Defi2 {
         require(_indiceDemande < demandes.length, "la demandes n'existe pas");
         require(demandes[_indiceDemande].entrepriseAddress == msg.sender, "vous n'etes pas le titulaire de la demande");
         require(demandes[_indiceDemande].etat == etatDemande.OUVERTE, "la demande n'est pas ouverte");
-        require(demandes[_indiceDemande].minReputation <= demandes[_indiceDemande].candidats[_candidatAccepte].reputation,
-         "ce profile ne peux pas etre accepté");
+        //require(demandes[_indiceDemande].minReputation <= demandes[_indiceDemande].candidats[_candidatAccepte].reputation,
+       //  "ce profile ne peux pas etre accepté");
         demandes[_indiceDemande].candidatAccepte = _candidatAccepte;
         demandes[_indiceDemande].etat = etatDemande.ENCOURS;
     }
@@ -150,7 +150,6 @@ contract Defi2 {
     /// @notice Cette fonction calcule un hash avec la fonction keccak256
     /// @param _link le lien du depo github
     /// @return le hash du lien
-
     function hashDepot(string memory _link) public pure returns (bytes32) {
         return keccak256(bytes(_link));
     }
@@ -158,7 +157,7 @@ contract Defi2 {
     /// @notice Cette fonction calcule un hash avec la fonction keccak256
     /// @param _indiceDemande l'indice de la demande
     /// @param _linkDepot le hash du lien du depo github
-    /// @return le hash du lien
+ 
 
     function livraison(uint _indiceDemande, bytes32 _linkDepot) public {
         require (utilisateur[msg.sender].adr == msg.sender, "n'est pas inscrit");
@@ -188,15 +187,28 @@ contract Defi2 {
         return admin;
     }
 
-   /* function getDemandes(uint _indice) public view returns(Demande memory) {
-        return demandes[_indice];
+    function getAllDemandes() public view returns(Demande[] memory) {
+        return demandes;
     }
 
+    function getDemande(uint _indice) public view returns(Demande memory) {
+        return demandes[_indice];
+    }
     function getUtilisateur(address _address) public view returns(Utilisateur memory) {
         return utilisateur[_address];
     }
-   */
+   
     function getBannies(address _address) public view returns(bool) {
         return bannies[_address];
+    }
+    
+    function getDemandesOf(address _address) public view return (Demande [] memory)
+    {
+        Demande [] dems;
+        for(let i=0;i<demandes.length;i++){
+            if (demandes[i].entrepriseAddress == _address){
+                dems.push(demandes[i]);
+            }
+        }
     }
 }

@@ -1,61 +1,54 @@
 import React, { Component, useState } from "react";
-import Defi2Contract from "./contracts/Defi2.json";
-import getWeb3 from "./getWeb3";
+//import Defi2Contract from "./contracts/Defi2.json";
+//import getWeb3 from "./getWeb3";
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  NavbarText
-} from 'reactstrap';
 
-import "./App.css";
+//import "./App.css";
 
-
-class Register extends React.Component {
-    
-    state = { };
+export default class Register extends React.Component {
   
     constructor(props) {
         super(props);
 
+        this.state = {
+          nom : "",
+          prenom : ""
+        };
+
+        this.handleOnClickInsciption = this.handleOnClickInsciption.bind(this);
+
+        this.handleChangeNom = this.handleChangeNom.bind(this);
+        this.handleChangePrenom = this.handleChangePrenom.bind(this);
+      }
+
+    
+    handleOnClickInsciption(event) {
+      this.props.callBack(this.state.nom,this.state.prenom);
+      event.preventDefault();
     }
 
-    componentDidMount = async () => {
-    };
-  
-    
-  
-    render() {
+    handleChangeNom(event) {
+      this.setState({ nom : event.target.value});
+    }
+    handleChangePrenom(event) {
+      this.setState({ prenom : event.target.value});
+    }
 
-      
+    render() {
       return (
-        <div className = "container">
-    
         <Form>
               <FormGroup>
                 <Label for="nom">Nom</Label>
-                <Input type="text" name="nom" id="nom" placeholder="nom placeholder"/>
+                <Input type="text" value={this.state.nom} onChange={this.handleChangeNom} placeholder="Saisir votre nom"/>
               </FormGroup>
               <FormGroup>
                 <Label for="prenom">Prenom</Label>
-                <Input type="text" name="prenom" id="prenom" placeholder="prenom placeholder" />
+                <Input type="text" value={this.state.prenom} onChange={this.handleChangePrenom} placeholder="Saisir votre prénom" />
               </FormGroup>
-              <Button>Submit</Button>
+              <Button onClick={this.handleOnClickInsciption}>Inscription</Button>
         </Form>
       
-      </div>
-  
-            
+      
       );
-    }
   }
-  
-  export default App;
-  
+}
