@@ -244,7 +244,7 @@ export default class Utilisateur extends React.Component {
             const indice = Number(this.state.indiceDemande); 
             const demandes = await contract.methods.getAllDemandes().call({from: account}); 
             const renum = Number(demandes[indice].renumeration);
-            await contract.methods.renumeration(indice).send({from: contract._address, value : renum}); 
+            await contract.methods.renumeration(indice).send({from: account, value : renum}); 
             this.setState({showLivraison : false}); 
             this.setState({showRenumeration : false});     
         }

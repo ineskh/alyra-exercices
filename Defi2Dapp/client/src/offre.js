@@ -64,7 +64,6 @@ export default class Offre extends React.Component {
         try { 
             const {web3, account, contract} = this.props;
             const indice = Number(event.target.value);
-            alert("stop");
             await contract.methods.postuler(indice).send({from: account});           
         }
         catch(error) {
