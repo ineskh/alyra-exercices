@@ -167,7 +167,7 @@ export default class App extends Component {
                                web3 = {this.state.web3}
                                contract = {this.state.contract}
                                account = {this.state.account}></Offre>
-                               : this.state.showComposantName === "Utilisateur"
+                      : this.state.showComposantName === "Utilisateur"
                       ? <Utilisateur callBack={this.handleUtilisateur} 
                                web3 = {this.state.web3}
                                contract = {this.state.contract}

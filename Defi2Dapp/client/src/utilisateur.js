@@ -11,11 +11,14 @@ export default class Utilisateur extends React.Component {
         super(props);
         this.state = { rows : new Array(),
                        rowsUser : new Array(),
+                       rowsUserAdmin : Array(),
                        showDemandes : false,
                        showCandidat : false,
                        showLivraison : false,
                        showRenumeration : false,
+                       showAdmin : false,
                        indiceDemande : "",
+                       isAdmin : false,
                        link : ""
                      };
         this.handleOnClickCandidat = this.handleOnClickCandidat.bind(this);
@@ -25,6 +28,7 @@ export default class Utilisateur extends React.Component {
         this.handleOnClickComfirmeLivraison = this.handleOnClickComfirmeLivraison.bind(this);
         this.handleChangeLink = this.handleChangeLink.bind(this);
         this.handleOnClickRenumeration = this.handleOnClickRenumeration.bind(this);
+        this.handleOnClickBannie = this.handleOnClickBannie.bind(this);
     }
 
     componentDidMount = async () => {
@@ -103,6 +107,31 @@ export default class Utilisateur extends React.Component {
                   
             }
             this.setState({rows});
+            const rowsUserAdmin = new Array();
+            const admin = await contract.methods.getAdmin().call({from : account});
+            if (admin === account) {
+                const user = await contract.methods.getAllUtilisateur().call({from : account});
+                const len = user.length;
+                for (let i = 0;i<len; i++){
+                    const u = user[i];
+                    rowsUserAdmin.push(
+                            <tr key = {i}> 
+                                <td> {u.nom} </td>
+                                <td> {u.prenom} </td>
+                                <td> {u.reputation} </td>
+                                <td> <button type="button" 
+                                                        className="btn btn-outline-secondary" 
+                                                        value={u.adr} 
+                                                        onClick={this.handleOnClickBannie} 
+                                                    >Bannie</button></td>
+                            
+                           </tr>);    
+
+                }
+                this.setState({showAdmin : true, rowsUserAdmin});
+            
+            }
+
         }
         catch (error) {
             alert(error);
@@ -171,16 +200,34 @@ export default class Utilisateur extends React.Component {
     handleChangeLink(event) {
       this.setState({ link : event.target.value});
     }
-    handleOnClickLivraison(event) {
-        this.setState({showLivraison : true});
-        this.state.indiceDemande = event.target.value;
+
+     async handleOnClickLivraison(event) {
+    
+        try { 
+            const {web3, account, contract} = this.props;
+            const indice = Number(this.state.indiceDemande); 
+            this.setState({indiceDemande : event.target.value});
+            const demandes = await contract.methods.getAllDemandes().call({from: account}); 
+            const paiement = demandes[this.state.indiceDemande].autorisePayment;
+            const link = demandes[this.state.indiceDemande].linkDepot;
+            
+            this.setState({showLivraison : true});
+            if (paiement){
+                this.setState({showRenumeration : true});
+            }
+                
+        }
+        catch(error) {
+            alert("Handle livraison" + error);
+        }
+   
         event.preventDefault();
     
     }
      async  handleOnClickComfirmeLivraison(event) {
         try { 
             const {web3, account, contract} = this.props;
-            const indice = Number(this.state.indiceDemandee);
+            const indice = Number(this.state.indiceDemande);
             const lienGithub = await contract.methods.hashDepot("Lien").send({from: account});   
             await contract.methods.livraison(indice, lienGithub); 
             this.setState({showRenumeration : true});      
@@ -194,8 +241,10 @@ export default class Utilisateur extends React.Component {
     async handleOnClickRenumeration(event){
         try { 
             const {web3, account, contract} = this.props;
-            const indice = Number(this.state.indiceDemandee);  
-            await contract.methods.renumeration(indice); 
+            const indice = Number(this.state.indiceDemande); 
+            const demandes = await contract.methods.getAllDemandes().call({from: account}); 
+            const renum = Number(demandes[indice].renumeration);
+            await contract.methods.renumeration(indice).send({from: contract._address, value : renum}); 
             this.setState({showLivraison : false}); 
             this.setState({showRenumeration : false});     
         }
@@ -203,7 +252,21 @@ export default class Utilisateur extends React.Component {
             alert("Handle renumeration" + error);
         }
 
-        this.preventDefault();
+       event.preventDefault();
+    }
+
+    async handleOnClickBannie(event) {
+        try { 
+            const {web3, account, contract} = this.props;
+            
+            const useraddress = event.target.value;
+            await contract.methods.bannie(useraddress).send({from: account});     
+        }
+        catch(error) {
+            alert("Handle bannie" + error);
+        }
+
+       event.preventDefault();
     }
     render() {
       return (       
@@ -273,6 +336,28 @@ export default class Utilisateur extends React.Component {
                 </FormGroup>
             </Form>
             :<></>
+    }
+    {
+        this.state.showAdmin == true
+        ?<Table striped  bordered size = "xl"> 
+            <thead>
+                <tr> 
+                    <th> Nom </th>
+                    <th> Prenom </th>
+                    <th> Reputation</th>
+                    <th> Action</th>
+
+                </tr>
+
+            </thead>
+            <tbody> 
+                {
+                    this.state.rowsUserAdmin
+                }
+            </tbody>
+            </Table>
+        : <></> 
+
     }
 
         </>

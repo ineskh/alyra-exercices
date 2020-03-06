@@ -13,6 +13,7 @@ contract Defi2 {
     address private admin;
     enum etatDemande {OUVERTE, ENCOURS, FERMER}
     Demande[] private demandes;
+    Utilisateur[] ListUtilisateurs;
     mapping (address => Utilisateur) public utilisateur;
     mapping (address => bool) public bannies;
 
@@ -72,6 +73,7 @@ contract Defi2 {
     nEstPasBannie(msg.sender){
         Utilisateur memory user = Utilisateur(_nom, _prenom, msg.sender, 1);
         utilisateur[msg.sender] = user;
+        ListUtilisateurs.push(user);
     }
 
     ///@notice Cette fonction permet a l'Administrateur de Bannir un utilisateur
@@ -190,6 +192,9 @@ contract Defi2 {
     function getAllDemandes() public view returns(Demande[] memory) {
         return demandes;
     }
+    function getAllUtilisateur() public view returns(Utilisateur[] memory) {
+        return ListUtilisateurs;
+    }
 
     function getDemande(uint _indice) public view returns(Demande memory) {
         return demandes[_indice];
@@ -202,13 +207,4 @@ contract Defi2 {
         return bannies[_address];
     }
     
-    function getDemandesOf(address _address) public view return (Demande [] memory)
-    {
-        Demande [] dems;
-        for(let i=0;i<demandes.length;i++){
-            if (demandes[i].entrepriseAddress == _address){
-                dems.push(demandes[i]);
-            }
-        }
-    }
 }
