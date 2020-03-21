@@ -1,8 +1,8 @@
 # Defi 3: CryptoShirt Game
 
 <li> A game based on the ERC721 Token. 
-<li> A CryptoShirt has a name and a value
-<li> The value increases when the CryptoShirt  change of owner.
+<li> A CryptoShirt has a name and a value (20 finney is payed for the CryptoShirt creation)
+<li> The value increases when the CryptoShirt  changes of owner.
 
 ## Prerequisite:
 
