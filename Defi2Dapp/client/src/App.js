@@ -106,7 +106,7 @@ export default class App extends Component {
       if (nom ==="" || prenom === ""){
         alert("nom ou prenom invalide");
       }else {
-        const {web3, account, contract} = this.state;
+        const {account, contract} = this.state;
         await contract.methods.inscription(nom,prenom).send({from: account});  
       }   
     }
@@ -122,7 +122,8 @@ export default class App extends Component {
         alert ("Il faut saisir tous les champs");
       } else {
         const {web3, account, contract} = this.state;
-        const val = Number(renumeration)+2*Number(renumeration)/100;
+        const value = await web3.utils.toWei(renumeration, "ether");
+        const val = Number(value)+2*Number(value)/100;        
         
         await contract.methods.ajouterDemande(Number(renumeration), Number(delais), description, 0, Number(minreputation)).send({from: account, value:val});
 

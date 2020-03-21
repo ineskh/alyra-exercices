@@ -14,7 +14,6 @@ contract("CryptoShirt", function(accounts){
         this.CryptoShirtInstance = await CryptoShirt.new({from : player1});
     });
 
-    
     it("createNewShirt", async function() {
         await this.CryptoShirtInstance.createNewShirt("myshirt", {from : player1, value: shirtPrice});
         expect(await this.CryptoShirtInstance.ownerOf(new BN(0))).to.equal(player1);

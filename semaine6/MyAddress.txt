@@ -1,0 +1,15 @@
+const Web3 = require('web3')
+
+const provider = require('./config.js')['config']['provider']
+const web3 = new Web3(provider)
+
+const privateKey = "6B070059373F9D8661B3F65A00DB4BB409B88209F50012C215FB3720182AFDE3";
+const password ="ines";
+
+const keystore = web3.eth.accounts.encrypt(privateKey, password);
+
+//const keystore = require('./config.js')['config']['keystore']
+//const password = require('./config.js')['config']['password']
+const NewAccount = web3.eth.accounts.decrypt(keystore, password)
+const myAddress = NewAccount['address']
+exports.NewAccount = NewAccount

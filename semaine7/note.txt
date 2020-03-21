@@ -1,0 +1,38 @@
+fixed bug : https://github.com/nodejs/node-gyp#on-windows
+
+
+
+
+PS C:\Users\inesk\Documents\Work\Alyra\Git\semaine7\Defi2> truffle develop 
+Truffle Develop started at http://127.0.0.1:8545/
+
+Accounts:
+(0) 0xd2190389fed8c418f8c26c986236da29da6fb20b
+(1) 0xd40c3326485442a0ac263e704e54c32b2a2aa11b
+(2) 0xd317c5feb61f7aa0d07a4a6a6c8f35ce96e54a87
+(3) 0x69ddec2adf2dfae20c08a22939b4ea0f4da6960b
+(4) 0x2407b53f02f2a42e7fe9f34a79f313ac4c9c7208
+(5) 0x8822095e0be2468de1dfdf884ad1de8f840f6921
+(6) 0xc22a4166d19b86d4e58a6ebcd5834286a3a16070
+(7) 0xe19725e4106590f1a3bbdbbb5a8b888707e8f374
+(8) 0xcbb51acb669d7eb83d70378419a630f2fb8ab746
+(9) 0x3bdd2090fc80410fd66ae3a5868a2d492a127f29
+
+Private Keys:
+(0) 3dc755f8f915a5bf792b2dc371ce973ff83028658497481fa38fcaace585a733
+(1) 779ab7581eb18b512806af9bdb7fb54431a4e9a1776599b7bdae343ce4ba2aca
+(2) a9c01522d476d2b00ad7c0014856f9757b4bd7e8db5b37f30658b3b95619bae4
+(3) ec7e7a16609a45a8dc4065c3517ab1003286cbbe582ef7ec75386a509061b8b4
+(4) b7292cefd2544a0ddf25174d47ef6035ff5bbd311057d3b2884ca2c945db133d
+(5) 2856576acdb4f11c3d4b22d61efb7ce75326f8d5a497ad4a74d8ba5d7729790a
+(6) f6b786d25e97e0a7fcfc93361fb8e3e61fa2c99e7dd9dc40f82221a257599e85
+(7) a52bc23cbee9ff791e216d2cd0b2477d3c57f645e8125c114fc6697935921f55
+(8) 65c355f9a142077783e568da0043aabb046f494f5a90ed11f620706313541d16
+(9) 2c2e3e9a27d13ec8c13d237c68fee1f66085612531a61ffa573001f4077bdf67
+
+Mnemonic: artist filter wing journey vessel helmet stage flame survey pencil family tongue
+
+⚠️  Important ⚠️  : This mnemonic was created for you by Truffle. It is not secure.
+Ensure you do not use it on production blockchains, or else you risk losing funds.
+
+truffle(develop)>

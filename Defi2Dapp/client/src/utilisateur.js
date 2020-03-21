@@ -228,8 +228,13 @@ export default class Utilisateur extends React.Component {
         try { 
             const {web3, account, contract} = this.props;
             const indice = Number(this.state.indiceDemande);
-            const lienGithub = await contract.methods.hashDepot("Lien").send({from: account});   
-            await contract.methods.livraison(indice, lienGithub); 
+            const lienGithub = await contract.methods.hashDepot(this.state.link).send({from: account});  
+            let link = "";
+            if (lienGithub.status){
+                link = lienGithub.events.NewLink.transactionHash;
+            }
+            // avec lienGithub -> check si event et récup value "_link" et passer "_link" dans la fonction livraison
+            await contract.methods.livraison(indice, link).send({from: account}); 
             this.setState({showRenumeration : true});      
         }
         catch(error) {
@@ -243,7 +248,8 @@ export default class Utilisateur extends React.Component {
             const {web3, account, contract} = this.props;
             const indice = Number(this.state.indiceDemande); 
             const demandes = await contract.methods.getAllDemandes().call({from: account}); 
-            const renum = Number(demandes[indice].renumeration);
+            const renum = await web3.utils.toWei(demandes[indice].renumeration, "ether");
+            const balance = await web3.eth.getBalance(contract._address);
             await contract.methods.renumeration(indice).send({from: account, value : renum}); 
             this.setState({showLivraison : false}); 
             this.setState({showRenumeration : false});     

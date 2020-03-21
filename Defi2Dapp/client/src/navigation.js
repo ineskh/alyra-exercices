@@ -80,8 +80,6 @@ export default class Navigation extends React.Component {
 <div className="jumbotron text-center">
    <h1>Place de Marché d’Illustrateurs Indépendants</h1>   
 </div>
- 
-
 
         </>
       );

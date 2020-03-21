@@ -1,0 +1,51 @@
+pragma solidity ^0.5.12;
+
+import "github.com/OpenZeppelin/openzeppelin-solidity/contracts/math/SafeMath.sol";
+
+contract CagnotteFestival{
+
+    
+    using SafeMath for uint;
+
+    mapping (address => uint) organisateurs; // Mapping des organisateurs et leurs parts 
+    string[] sponsors; // Liste des sponsors
+    uint constant LIMITE = 100; // Limite des sponsors à ajouter
+
+    constructor() public {
+        organisateurs[msg.sender] = 100;   
+    }
+    
+    function test(uint256 val1, uint256 val2)public pure returns(uint256){
+        return val1.add(val2);
+    }
+    
+    function transfererOrga(address orga, uint parts) public {
+        // vérifier si l'organisateur a assez de parts à transférer 
+        require(organisateurs[msg.sender] >= parts);
+        // vérifier si l'orga n'existe pas 
+        require(!estOrga(orga));
+        // vérifier si l'orga auquel on transfère des parts n'est pas l'address 0
+        require(orga != address(0));
+        // modifier les parts de l'organisateur actuel 
+        organisateurs[msg.sender] -= parts;
+        // rajouter les parts au nouveau orga
+        organisateurs[orga] = parts;
+    }
+    
+    function estOrga(address orga) public view returns (bool){ 
+        // vérifier si un l'orga est un organisateur revient à vérifier si 
+        // l'orga donné a des parts > 0 
+        return (organisateurs[orga] > 0);
+    }
+    
+    function sponsoriser(string memory nom) public payable {
+        // vérifier les ethers envoyés par le sponsor 
+        // et si la limite a été atteinte 
+        if(msg.value >= 30 ether &&  sponsors.length <= LIMITE){
+            // Si c'est >= 30 ether on rajoute le nom du sponsor à la liste 
+            sponsors.push(nom);
+        }
+    }
+
+ 
+}

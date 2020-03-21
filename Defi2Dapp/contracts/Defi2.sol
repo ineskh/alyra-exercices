@@ -1,4 +1,4 @@
-pragma solidity 0.5.16;
+pragma solidity ^0.5.16;
 
 pragma experimental ABIEncoderV2;
 
@@ -13,7 +13,6 @@ contract Defi2 {
     address private admin;
     enum etatDemande {OUVERTE, ENCOURS, FERMER}
     Demande[] private demandes;
-    Utilisateur[] ListUtilisateurs;
     mapping (address => Utilisateur) public utilisateur;
     mapping (address => bool) public bannies;
 
@@ -61,6 +60,8 @@ contract Defi2 {
     */
     event eventCandidatPaye(address candidat, uint val);
 
+    event NewLink(bytes32 indexed link);
+
     constructor() public {
         admin = msg.sender;
     }
@@ -73,7 +74,6 @@ contract Defi2 {
     nEstPasBannie(msg.sender){
         Utilisateur memory user = Utilisateur(_nom, _prenom, msg.sender, 1);
         utilisateur[msg.sender] = user;
-        ListUtilisateurs.push(user);
     }
 
     ///@notice Cette fonction permet a l'Administrateur de Bannir un utilisateur
@@ -152,8 +152,8 @@ contract Defi2 {
     /// @notice Cette fonction calcule un hash avec la fonction keccak256
     /// @param _link le lien du depo github
     /// @return le hash du lien
-    function hashDepot(string memory _link) public pure returns (bytes32) {
-        return keccak256(bytes(_link));
+    function hashDepot(string memory _link) public {
+        emit NewLink(keccak256(abi.encodePacked(_link)));
     }
 
     /// @notice Cette fonction calcule un hash avec la fonction keccak256
@@ -181,19 +181,16 @@ contract Defi2 {
         require(demandes[_indiceDemande].candidatAccepte == msg.sender, "vous n'etes pas le candidat accepté pour cette demande");
         require(demandes[_indiceDemande].autorisePayment == true, "Payment pas encore autorisé");
         msg.sender.transfer(demandes[_indiceDemande].renumeration);
-        demandes[_indiceDemande].autorisePayment = true;
+        demandes[_indiceDemande].autorisePayment = false;
         emit eventCandidatPaye(msg.sender,demandes[_indiceDemande].renumeration);
     }
 
-    function getAdmin() public view returns(address) {
-        return admin;
+    function isAdmin() public view returns(bool) {
+        return (admin == msg.sender);
     }
 
     function getAllDemandes() public view returns(Demande[] memory) {
         return demandes;
-    }
-    function getAllUtilisateur() public view returns(Utilisateur[] memory) {
-        return ListUtilisateurs;
     }
 
     function getDemande(uint _indice) public view returns(Demande memory) {
@@ -207,4 +204,49 @@ contract Defi2 {
         return bannies[_address];
     }
     
+    function getDemandesOf(address _address) public view returns (Demande[] memory)
+    {
+        Demande[] memory dems;
+        for(uint i=0;i<demandes.length;i++) {
+            if (demandes[i].entrepriseAddress == _address){
+                dems[dems.length] = demandes[i];
+            }
+        }
+        return dems;
+    }
+    
+    function getDemandesPostulerOf(address _address) public view returns (Demande[] memory)
+    {
+        Demande[] memory dems;
+        for(uint i=0;i<demandes.length;i++) {
+            uint j=0;
+            bool candidat = false; 
+            while (j <demandes[i].candidatsAddress.length && !candidat) {
+                if (demandes[i].candidatsAddress[j] == _address){
+                    dems[dems.length] = demandes[i];
+                    candidat = true;
+                }
+                j++;
+            }
+        }
+        return dems;
+    }
+    
+    function getDemandesAccepterOf(address _address) public view returns (Demande[] memory)
+    {
+        Demande[] memory dems;
+        for(uint i=0;i<demandes.length;i++) {
+            if (demandes[i].candidatAccepte == _address){
+                dems[dems.length] = demandes[i];
+            }
+     
+        }
+        return dems;
+    }
+    
+    /*function fallback () payable external {
+    require(msg.data.length == 0,"transfer fail");
+    bool success = msg.sender.send(msg.value);  
+    require(success,"transfer fail" );
+    }*/
 }

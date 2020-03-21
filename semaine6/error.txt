@@ -1,0 +1,45 @@
+node .\DAI2Chai.js
+Not enough SAI for migration, waiting for more deposit...
+(node:19948) UnhandledPromiseRejectionWarning: Error: Returned error: replacement transaction underpriced
+    at Object.ErrorResponse (C:\Users\inesk\Documents\Work\Alyra\Defi\DAI2Chai\node_modules\web3-core-helpers\src\errors.js:29:16)
+    at C:\Users\inesk\Documents\Work\Alyra\Defi\DAI2Chai\node_modules\web3-core-requestmanager\src\index.js:140:36
+    at XMLHttpRequest.request.onreadystatechange (C:\Users\inesk\Documents\Work\Alyra\Defi\DAI2Chai\node_modules\web3-providers-http\src\index.js:102:13)
+    at XMLHttpRequestEventTarget.dispatchEvent (C:\Users\inesk\Documents\Work\Alyra\Defi\DAI2Chai\node_modules\xhr2-cookies\dist\xml-http-request-event-target.js:34:22)
+    at XMLHttpRequest._setReadyState (C:\Users\inesk\Documents\Work\Alyra\Defi\DAI2Chai\node_modules\xhr2-cookies\dist\xml-http-request.js:208:14)
+    at XMLHttpRequest._onHttpResponseEnd (C:\Users\inesk\Documents\Work\Alyra\Defi\DAI2Chai\node_modules\xhr2-cookies\dist\xml-http-request.js:318:14)
+    at IncomingMessage.<anonymous> (C:\Users\inesk\Documents\Work\Alyra\Defi\DAI2Chai\node_modules\xhr2-cookies\dist\xml-http-request.js:289:61)
+    at IncomingMessage.emit (events.js:333:22)
+    at endReadableNT (_stream_readable.js:1204:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21)
+(node:19948) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+(node:19948) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
+{
+  blockHash: '0x8baf03f97f4d67daa7c9e4f15b19effb00e3788f7f9b7e443780dd7ca6d5dfc3',
+  blockNumber: 9559284,
+  contractAddress: null,
+  cumulativeGasUsed: 4704612,
+  from: '0x78fb3d7ec7e6ebf1548cd7999164e59f7d065380',
+  gasUsed: 28534,
+  logs: [
+    {
+      address: '0x06AF07097C9Eeb7fD685c692751D5C66dB49c215',
+      blockHash: '0x8baf03f97f4d67daa7c9e4f15b19effb00e3788f7f9b7e443780dd7ca6d5dfc3',
+      blockNumber: 9559284,
+      data: '0x0000000000000000000000000000000000000000000000000000000000000000',
+      logIndex: 78,
+      removed: false,
+      topics: [Array],
+      transactionHash: '0xc114b9237c50334a652d4a993ff1e9668c8cebb3400ed8930ead92496e211bd4',
+      transactionIndex: 88,
+      id: 'log_9f508697'
+    }
+  ],
+  logsBloom: '0x00000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000800000000000000000000000000040000000000000008000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000000100000000000000002000000000002000000000000800000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000000000000000',
+  status: true,
+  to: '0x06af07097c9eeb7fd685c692751d5c66db49c215',
+  transactionHash: '0xc114b9237c50334a652d4a993ff1e9668c8cebb3400ed8930ead92496e211bd4',
+  transactionIndex: 88
+}
+Chai sent to Storage, waiting for next deposit...
+Not enough SAI for migration, waiting for more deposit...
+(node:19948) UnhandledPromiseRejectionWarning: Error: Returned error: replacement transaction underpriced

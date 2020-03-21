@@ -1,0 +1,76 @@
+pragma solidity ^0.5.12;
+
+import "github.com/OpenZeppelin/openzeppelin-solidity/contracts/math/SafeMath.sol";
+
+contract Loterie{
+    
+    using SafeMath for uint;
+    
+    uint expireLoterie;
+    mapping(uint => uint) tirageParJour;
+    Participant [] participants;
+    mapping(address => bool) gagnants;
+    uint nombreGagnats;
+    
+    struct Participant {
+        address adr;
+        uint jour;
+        uint nombre;
+    }
+    
+    constructor() public {
+        expireLoterie = now + 5 days;
+    }
+    
+    
+    function acheterTicket(uint jour, uint8 random) public payable {
+        
+        require(SafeMath.add(now,jour) <=expireLoterie, "loterie expirée");
+        require(random <= 255, "le nombre est superieur à 255");
+        require(msg.value >=100 finney ,"montant insuffisant, le ticket coute 100 finney");
+        Participant memory p = Participant (msg.sender, jour, random);
+        participants.push(p);
+    }
+    
+    function tirerUnNombreAleatoireParJour() internal {
+        
+        require (now <= expireLoterie, "loterie expirée");
+        
+        tirageParJour[jour(now)] = random();
+
+    }
+    
+    function random () private view returns (uint8) {
+         
+        return uint8(SafeMath.mod(uint256(blockhash(block.number-1)), 255));
+   }
+   
+    function jour(uint t) internal pure returns (uint) {
+        return SafeMath.div(t, 1 days);
+   }
+   
+    function selectionGagnant() internal {
+        
+        require(now >expireLoterie, "loterie pas encore expirée");
+        
+        for(uint i=0; i<5; i++){
+            for(uint j=0; j<participants.length; j++){
+                if(participants[j].jour == i && participants[j].nombre == tirageParJour[i]){
+                    gagnants[participants[j].adr]=true;
+                    nombreGagnats++;
+                }
+            }
+        }
+    }
+    
+    function retirerGain() public {
+        
+        require(now > expireLoterie , "Lotterie pas encore expirée");
+        require(gagnants[msg.sender] ==true, "Vous n'etes pas gagnants dans cette loterie");
+        uint partGain = SafeMath.div(address(this).balance,nombreGagnats);
+        msg.sender.transfer(partGain);
+     
+        
+    }
+    
+}

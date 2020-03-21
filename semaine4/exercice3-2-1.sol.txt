@@ -1,0 +1,29 @@
+pragma solidity ^0.5.16;
+
+contract CagnotteFestival{
+
+ mapping (address => uint) organisateurs;
+
+ constructor() public {
+   organisateurs[msg.sender] = 100;   
+ }
+ 
+ 
+ function transfererOrga(address orga, uint parts) public { 
+     
+     require (organisateurs[msg.sender] > 0 , "vous devrez etre organisateur pour transferer des parts");
+     require (parts <= organisateurs[msg.sender], "vous n'avez pas assez de parts");
+     require (orga != address(0));
+     
+     organisateurs[orga] += parts;
+     organisateurs[msg.sender] -= parts;
+     
+     
+ }
+ 
+ 
+ function estOrga(address orga) public view returns (bool){
+     return (organisateurs[orga] > 0) ;
+ }
+ 
+}
